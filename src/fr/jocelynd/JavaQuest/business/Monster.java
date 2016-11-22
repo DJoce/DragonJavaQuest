@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import JavaQuest.Action;
+import fr.jocelynd.JavaQuest.utils.Utils;
 
 @SuppressWarnings("resource")
 public class Monster extends Character {
@@ -101,7 +101,7 @@ public class Monster extends Character {
 	}
 
 	public Monster listOfMonster() {
-		Action act = new Action();
+		Utils act = new Utils();
 
 		List<Monster> lsMon = new ArrayList<Monster>();
 		lsMon.add(createGoblin());

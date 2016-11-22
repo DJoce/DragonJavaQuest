@@ -1,12 +1,13 @@
-package fr.jocelynd.JavaQuest.service;
+package fr.jocelynd.JavaQuest.serviceImpl;
 
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
 import fr.jocelynd.JavaQuest.business.Player;
+import fr.jocelynd.JavaQuest.service.PlayerInterface;
 
-public class PlayerService {
+public class PlayerService implements PlayerInterface{
 
 	private final int PRICE = 30;
 

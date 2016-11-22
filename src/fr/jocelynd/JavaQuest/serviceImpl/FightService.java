@@ -1,15 +1,19 @@
-package JavaQuest;
+package fr.jocelynd.JavaQuest.serviceImpl;
 
 import java.util.Scanner;
 
 import fr.jocelynd.JavaQuest.business.Player;
+import fr.jocelynd.JavaQuest.service.FightInterface;
+import fr.jocelynd.JavaQuest.service.PlayerInterface;
+import fr.jocelynd.JavaQuest.utils.Utils;
 import fr.jocelynd.JavaQuest.business.Monster;
 
 import java.util.Random;
 
-public class Combat {
+public class FightService implements FightInterface {
+	PlayerInterface pi = new PlayerService();
 
-	public static int attaquer(int force, int defense) {
+	public int attaquer(int force, int defense) {
 		int degats = 0;
 		Random randomGenerator = new Random();
 		degats = force + randomGenerator.nextInt(force / 5) - defense;
@@ -22,7 +26,7 @@ public class Combat {
 		}
 	}
 
-	public static int augmenterForce() {
+	public int augmenterForce() {
 		int bonus = 0;
 		Random randomGenerator = new Random();
 		bonus = randomGenerator.nextInt(3) + 1;
@@ -30,10 +34,10 @@ public class Combat {
 		return bonus;
 	}
 
-	public static int seSoigner(int vie, int vieMax, int force) {
+	public int seSoigner(int vie, int vieMax, int force) {
 		int soin = 0;
 		Random randomGenerator = new Random();
-		soin = randomGenerator.nextInt(force*2)+force;
+		soin = randomGenerator.nextInt(force * 2) + force;
 		System.out.println("Le héros récupère " + soin + " points de vie.");
 		vie += soin;
 		if (vie > vieMax) {
@@ -42,23 +46,23 @@ public class Combat {
 		return vie;
 	}
 
-	public static int seSuicider() {
+	public int seSuicider() {
 		System.out.println("Le héros se plante son épée dans le ventre, mais que fait-il ????");
 		System.out.println("Il est au bord de l'agonie !!!!");
 		return 1;
 	}
 
-	public static boolean fight(Player heros, Monster monstre) {
+	public boolean fight(Player heros, Monster monstre) {
 
 		int tour = 0;
 		int bonusfrc = 0;
 		int action;
 
-		Action act = new Action();
+		Utils act = new Utils();
 
 		do {
 			tour++;
-			
+
 			System.out.println("\n\nTour n° " + tour);
 			System.out
 					.println("Santé de " + monstre.getNom() + " " + 100 * monstre.getPdv() / monstre.getPdvMax() + "%");
@@ -105,9 +109,8 @@ public class Combat {
 
 			heros.setXp(heros.getXp() + monstre.getXp());
 			heros.setGold(heros.getGold() + monstre.getGold());
-			if (heros.getXp() >= 100)
-			{
-				heros.levelUp();
+			if (heros.getXp() >= 100) {
+				pi.levelUp(heros);
 			}
 			return true;
 

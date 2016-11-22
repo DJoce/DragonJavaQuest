@@ -1,21 +1,27 @@
-package JavaQuest;
+package fr.jocelynd.JavaQuest.serviceImpl;
 
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
 import fr.jocelynd.JavaQuest.business.Player;
+import fr.jocelynd.JavaQuest.service.FightInterface;
+import fr.jocelynd.JavaQuest.service.PlayerInterface;
+import fr.jocelynd.JavaQuest.service.WorldInterface;
+import fr.jocelynd.JavaQuest.utils.Utils;
 import fr.jocelynd.JavaQuest.business.Monster;
 
-public class World {
+public class WorldService implements WorldInterface {
+	PlayerInterface pl = new PlayerService();
+	FightInterface fi = new FightService();
 
-	public static void main(String[] args) {
+	public void game() {
 
 		Player heros = new Player();
 		Random rng = new Random();
 		Scanner sc = new Scanner(System.in);
 		Date time = new Date();
-		Action act = new Action();
+		Utils act = new Utils();
 		String name;
 		boolean stay = true;
 
@@ -23,15 +29,15 @@ public class World {
 		heros.setGameStartTime(time);
 		System.out.println("Bonjour valeureux héros, pouvez-vous indiquer votre nom ? (2 à 12 caractères)");
 		do {
-		name = sc.nextLine();
-		if (name.length() > 12 || name.length() < 2) {
-			System.out.println("Invalide");
-			 stay = true;
-		} else {
-			 stay = false;
-		}
-		}while(stay);
-		
+			name = sc.nextLine();
+			if (name.length() > 12 || name.length() < 2) {
+				System.out.println("Invalide");
+				stay = true;
+			} else {
+				stay = false;
+			}
+		} while (stay);
+
 		name = name.trim();
 		heros.setNom(name);
 		heros.setPdv(200 + rng.nextInt(50));
@@ -43,7 +49,8 @@ public class World {
 		heros.setGold(50);
 
 		System.out.println("Bonjour " + heros.getNom() + ", bienvenue dans un monde de JavaQuest vers. Pipi !");
-		heros.getCaracteristiques();
+		pl.getCaracteristiques(heros);
+
 		stay = true;
 		int choix;
 		do {
@@ -59,18 +66,18 @@ public class World {
 			case 1: {
 				Monster monstre = new Monster();
 				monstre = monstre.listOfMonster();
-				stay = Combat.fight(heros, monstre);
+				stay = fi.fight(heros, monstre);
 				break;
 			}
 			case 2: {
-				heros.getCaracteristiques();
+				pl.getCaracteristiques(heros);
 				break;
 			}
 			case 3: {
-				heros.goToHotel();
+				pl.goToHotel(heros);
 				break;
 			}
-			
+
 			case 0: {
 				stay = false;
 				break;
@@ -81,7 +88,5 @@ public class World {
 			}
 			}
 		} while (stay);
-
-		System.out.println("Game Over");
 	}
 }

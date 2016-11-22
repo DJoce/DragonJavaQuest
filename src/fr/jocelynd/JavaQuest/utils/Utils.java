@@ -1,11 +1,11 @@
-package JavaQuest;
+package fr.jocelynd.JavaQuest.utils;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Action {
+public class Utils {
 
-	public Action() {}
+	public Utils() {}
 	
 	public int scanIntBetween(int min, int max) {
 		Scanner sc = new Scanner(System.in);
@@ -29,4 +29,7 @@ public class Action {
 		return value;
 
 	}
+	
+	
+	
 }
