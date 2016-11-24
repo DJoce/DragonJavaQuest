@@ -6,7 +6,7 @@ import fr.jocelynd.JavaQuest.business.Player;
 public interface FightInterface {
 
 	
-	public int attaquer(int force, int defense);
+	public int attaquer(int force, int bonusFrc, int defense);
 	public  int augmenterForce();
 	public  int seSoigner(int vie, int vieMax, int force);
 	public  int seSuicider();

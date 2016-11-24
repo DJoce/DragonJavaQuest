@@ -1,7 +1,5 @@
 package fr.jocelynd.JavaQuest.serviceImpl;
 
-import java.util.Scanner;
-
 import fr.jocelynd.JavaQuest.business.Player;
 import fr.jocelynd.JavaQuest.service.FightInterface;
 import fr.jocelynd.JavaQuest.service.PlayerInterface;
@@ -13,15 +11,16 @@ import java.util.Random;
 public class FightService implements FightInterface {
 	PlayerInterface pi = new PlayerService();
 
-	public int attaquer(int force, int defense) {
+	public int attaquer(int force, int bonusFrc, int defense) {
 		int degats = 0;
 		Random randomGenerator = new Random();
-		degats = force + randomGenerator.nextInt(force / 5) - defense;
+		degats = force + bonusFrc + randomGenerator.nextInt(force / 5) - defense;
 		if (degats <= 1) {
 			System.out.println("L'attaque est inéficace et ne fait qu'1 dégât.");
 			return 1;
 		} else {
 			System.out.println(degats + " dégâts infligés !");
+			bonusFrc--;
 			return degats;
 		}
 	}
@@ -29,7 +28,7 @@ public class FightService implements FightInterface {
 	public int augmenterForce() {
 		int bonus = 0;
 		Random randomGenerator = new Random();
-		bonus = randomGenerator.nextInt(3) + 1;
+		bonus = randomGenerator.nextInt(5) + 1;
 		System.out.println("Bonus de force : " + bonus);
 		return bonus;
 	}
@@ -80,7 +79,7 @@ public class FightService implements FightInterface {
 			switch (action) {
 			case 1:
 				System.out.println("\nLe héros attaque !");
-				monstre.setPdv(monstre.getPdv() - attaquer(heros.getFrc() + bonusfrc, monstre.getDfs()));
+				monstre.setPdv(monstre.getPdv() - attaquer(heros.getFrc(), bonusfrc, monstre.getDfs()));
 				break;
 			case 2:
 				bonusfrc += augmenterForce();
@@ -99,15 +98,16 @@ public class FightService implements FightInterface {
 			}
 			if (heros.getPdv() > 0) {
 				System.out.println("\nLe monstre réplique !");
-				heros.setPdv(heros.getPdv() - attaquer(monstre.getFrc() + tour, heros.getDfs()));
+				heros.setPdv(heros.getPdv() - attaquer(monstre.getFrc(), tour/2 , heros.getDfs()));
 			}
 		} while ((heros.getPdv() > 0) && (monstre.getPdv() > 0));
 		if (monstre.getPdv() <= 0 && heros.getPdv() > 0) {
 			System.out.println("\n\nLe monstre est vaincu, vous avez gagné !!!");
-			System.out.println("vous remportez " + monstre.getXp() + " Points d'expérience.");
+			int xpGain = monstre.getXp() / heros.getNv();
+			System.out.println("vous remportez " + xpGain + " Points d'expérience.");
 			System.out.println("vous remportez " + monstre.getGold() + " pièces d'or.");
 
-			heros.setXp(heros.getXp() + monstre.getXp());
+			heros.setXp(heros.getXp() + xpGain);
 			heros.setGold(heros.getGold() + monstre.getGold());
 			if (heros.getXp() >= 100) {
 				pi.levelUp(heros);
@@ -120,4 +120,5 @@ public class FightService implements FightInterface {
 		}
 
 	}
+
 }

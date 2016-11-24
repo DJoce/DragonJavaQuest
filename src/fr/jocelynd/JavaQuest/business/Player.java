@@ -9,6 +9,9 @@ public class Player extends Character {
 
 	private int nv;
 	private Date gameStartTime = new Date();
+	private Item itemOn;
+
+
 
 	public Player(String nom, int pdv, int pdvMax, int frc, int dfs, int xp, int gold) {
 		super(nom, pdv, pdvMax, frc, dfs, xp, gold);
@@ -35,5 +38,12 @@ public class Player extends Character {
 		this.gameStartTime = l;
 	}
 
+	public Item getItemOn() {
+		return itemOn;
+	}
+
+	public void setItemOn(Item itemOn) {
+		this.itemOn = itemOn;
+	}
 
 }

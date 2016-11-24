@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import fr.jocelynd.JavaQuest.business.Player;
 import fr.jocelynd.JavaQuest.service.FightInterface;
+import fr.jocelynd.JavaQuest.service.ItemInterface;
+import fr.jocelynd.JavaQuest.service.MonsterInterface;
 import fr.jocelynd.JavaQuest.service.PlayerInterface;
 import fr.jocelynd.JavaQuest.service.WorldInterface;
 import fr.jocelynd.JavaQuest.utils.Utils;
@@ -13,30 +15,21 @@ import fr.jocelynd.JavaQuest.business.Monster;
 
 public class WorldService implements WorldInterface {
 	PlayerInterface pl = new PlayerService();
+	MonsterInterface mi = new MonsterService();
 	FightInterface fi = new FightService();
+	ItemInterface ii = new ItemService();
+	Random rng = new Random();
+	Utils act = new Utils();
+	Player heros = new Player();
+	Date time = new Date();
 
-	public void game() {
-
-		Player heros = new Player();
-		Random rng = new Random();
-		Scanner sc = new Scanner(System.in);
-		Date time = new Date();
-		Utils act = new Utils();
-		String name;
-		boolean stay = true;
-
+	public void createHero() {
 		time.getTime();
 		heros.setGameStartTime(time);
+		String name;
+
 		System.out.println("Bonjour valeureux héros, pouvez-vous indiquer votre nom ? (2 à 12 caractères)");
-		do {
-			name = sc.nextLine();
-			if (name.length() > 12 || name.length() < 2) {
-				System.out.println("Invalide");
-				stay = true;
-			} else {
-				stay = false;
-			}
-		} while (stay);
+		name = act.getStringFromScanner(12, 2);
 
 		name = name.trim();
 		heros.setNom(name);
@@ -48,8 +41,15 @@ public class WorldService implements WorldInterface {
 		heros.setXp(0);
 		heros.setGold(50);
 
-		System.out.println("Bonjour " + heros.getNom() + ", bienvenue dans un monde de JavaQuest vers. Pipi !");
+		System.out.println("Bonjour " + heros.getNom() + ", bienvenue dans le monde de Hitozolt");
 		pl.getCaracteristiques(heros);
+
+	}
+
+	public void game() {
+
+		boolean stay = true;
+		createHero();
 
 		stay = true;
 		int choix;
@@ -58,6 +58,7 @@ public class WorldService implements WorldInterface {
 			System.out.println("1) Affronter un monstre");
 			System.out.println("2) Consulter caractéristiques");
 			System.out.println("3) Se reposer à l'Hôtel (30 pièces d'or)");
+			System.out.println("4) Visiter la boutique");
 			System.out.println("0) Quitter");
 			choix = act.scanIntBetween(0, 4);
 
@@ -65,7 +66,7 @@ public class WorldService implements WorldInterface {
 
 			case 1: {
 				Monster monstre = new Monster();
-				monstre = monstre.listOfMonster();
+				monstre = mi.listOfMonster();
 				stay = fi.fight(heros, monstre);
 				break;
 			}
@@ -75,6 +76,11 @@ public class WorldService implements WorldInterface {
 			}
 			case 3: {
 				pl.goToHotel(heros);
+				break;
+			}
+
+			case 4: {
+				ii.buyItem(heros);
 				break;
 			}
 
