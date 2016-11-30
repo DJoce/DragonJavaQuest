@@ -56,4 +56,24 @@ public class Utils {
 	return name;
 	}
 	
+	
+	public char getYesOrNo() {
+	String choice;
+	char res;
+	boolean stay;
+	do {
+		System.out.println("(Y / N)");
+		choice = sc.nextLine();
+		res = choice.toUpperCase().charAt(0);
+		
+		if (res != 'Y' && res != 'N') {
+			System.out.println("Invalide");
+			stay = true;
+		} else {
+			stay = false;
+		}
+	} while (stay);
+	return res;
+	}
+	
 }
