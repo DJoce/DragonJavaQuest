@@ -9,7 +9,6 @@ import fr.jocelynd.JavaQuest.business.Monster;
 import java.util.Random;
 
 public class FightService implements FightInterface {
-	PlayerInterface pi = new PlayerService();
 
 	public int attaquer(int force, int bonusFrc, int defense) {
 		int degats = 0;
@@ -109,9 +108,7 @@ public class FightService implements FightInterface {
 
 			heros.setXp(heros.getXp() + xpGain);
 			heros.setGold(heros.getGold() + monstre.getGold());
-			if (heros.getXp() >= 100) {
-				pi.levelUp(heros);
-			}
+			
 			return true;
 
 		} else {

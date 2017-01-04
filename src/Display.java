@@ -4,7 +4,7 @@ public class Display {
 	public void printTitle() {
 		System.out.println("JDSoft presente...");
 		System.out.println("\n\n--------------------------------------------------------------");
-		System.out.println("----    Java Quest -Working Title- v0.1 @Jocelyn Dalle    ----");
+		System.out.println("----    Java Quest -Working Title- v0.2 @Jocelyn Dalle    ----");
 		System.out.println("--------------------------------------------------------------");
 
 	}

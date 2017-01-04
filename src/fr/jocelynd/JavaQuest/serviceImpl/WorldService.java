@@ -1,8 +1,8 @@
 package fr.jocelynd.JavaQuest.serviceImpl;
 
+import java.sql.Connection;
 import java.util.Date;
 import java.util.Random;
-import java.util.Scanner;
 
 import fr.jocelynd.JavaQuest.business.Player;
 import fr.jocelynd.JavaQuest.service.FightInterface;
@@ -14,49 +14,51 @@ import fr.jocelynd.JavaQuest.utils.Utils;
 import fr.jocelynd.JavaQuest.business.Monster;
 
 public class WorldService implements WorldInterface {
-	PlayerInterface pl = new PlayerService();
-	MonsterInterface mi = new MonsterService();
-	FightInterface fi = new FightService();
-	ItemInterface ii = new ItemService();
-	Random rng = new Random();
-	Utils act = new Utils();
-	Player heros = new Player();
-	Date time = new Date();
+	
+	private Connection conn;
 
-	public void createHero() {
-		time.getTime();
-		heros.setGameStartTime(time);
-		String name;
-
-		System.out.println("Bonjour valeureux héros, pouvez-vous indiquer votre nom ? (2 à 12 caractères)");
-		name = act.getStringFromScanner(12, 2);
-
-		name = name.trim();
-		heros.setNom(name);
-		heros.setPdv(200 + rng.nextInt(50));
-		heros.setPdvMax(heros.getPdv());
-		heros.setFrc(15 + rng.nextInt(10));
-		heros.setDfs(10 + rng.nextInt(5));
-		heros.setNv(1);
-		heros.setXp(0);
-		heros.setGold(50);
-
-		System.out.println("Bonjour " + heros.getNom() + ", bienvenue dans le monde de Hitozolt");
-		pl.getCaracteristiques(heros);
-
+	public WorldService(Connection conn) {
+		this.conn = conn;
 	}
-
+	
 	public void game() {
 
+		PlayerInterface pi = new PlayerService(conn);
+		MonsterInterface mi = new MonsterService();
+		FightInterface fi = new FightService();
+		ItemInterface ii = new ItemService();
+		
+		Utils act = new Utils();
+
+		
 		boolean stay = true;
-		createHero();
+		int newGame;
+		Player heros = null;
+		System.out.println("\n\nQue faire ?");
+		System.out.println("1) Nouvelle Partie");
+		System.out.println("2) Charger personnage");
+		newGame = act.scanIntBetween(1, 2);
+		switch (newGame) {
+
+		case 1: {
+			heros = pi.createHero();
+			break;
+		}
+		case 2: {
+			heros = pi.loadHero();
+			break;
+		}
+		}
+
+	
+		
 
 		stay = true;
 		int choix;
 		do {
 			System.out.println("\n\nQue voulez-vous faire, héros ?");
 			System.out.println("1) Affronter un monstre");
-			System.out.println("2) Consulter caractéristiques");
+			System.out.println("2) Consulter caractéristiques / Sauvegarder");
 			System.out.println("3) Se reposer à l'Hôtel (30 pièces d'or)");
 			System.out.println("4) Visiter la boutique");
 			System.out.println("0) Quitter");
@@ -71,11 +73,11 @@ public class WorldService implements WorldInterface {
 				break;
 			}
 			case 2: {
-				pl.getCaracteristiques(heros);
+				pi.getCaracteristiques(heros);
 				break;
 			}
 			case 3: {
-				pl.goToHotel(heros);
+				pi.goToHotel(heros);
 				break;
 			}
 
@@ -93,6 +95,12 @@ public class WorldService implements WorldInterface {
 				break;
 			}
 			}
+			
+			if (heros.getXp() >= 100) {
+				pi.levelUp(heros);
+			}
 		} while (stay);
 	}
+
+
 }
